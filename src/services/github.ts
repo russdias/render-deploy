@@ -1,6 +1,5 @@
-import * as core from '@actions/core'
 import * as github from '@actions/github'
-import { GH_TOKEN } from 'src/consts'
+import { GITHUB_TOKEN } from 'src/consts'
 import { octoClient } from '../clients/octoClient'
 import { DeployStatus, type Deploy } from '../types'
 import { getServiceUrl } from './deploy'
@@ -9,14 +8,9 @@ import { getServiceUrl } from './deploy'
  * 💬 Posts a deployment update comment to GitHub
  */
 export const postDeployUpdate = async (deploy: Deploy): Promise<void> => {
-  if (!GH_TOKEN) {
-    core.info('No GH_TOKEN provided, skipping comments')
-    return
-  }
-
-  const octokit = octoClient(GH_TOKEN)
+  const octokit = octoClient(GITHUB_TOKEN)
   const context = github.context
-
+  const { owner, repo } = context.repo
   let message = `## 🚀 Render Deployment Update
 📊 Status: \`${deploy.status}\`
 ⏰ Triggered at: ${new Date(deploy.createdAt).toLocaleString()}`
@@ -27,8 +21,8 @@ export const postDeployUpdate = async (deploy: Deploy): Promise<void> => {
   }
 
   await octokit.rest.repos.createCommitComment({
-    owner: context.repo.owner,
-    repo: context.repo.repo,
+    owner,
+    repo,
     commit_sha: context.sha,
     body: message
   })

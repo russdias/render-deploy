@@ -17,12 +17,6 @@ inputs:
     description:
       'The ID of your Render service (found in service URL or settings)'
     required: true
-  GH_TOKEN:
-    description:
-      'GitHub token for enhanced functionality like deployment comments and
-      status updates'
-    required: false
-    default: ${{ github.token }}
 
 outputs:
   status:
