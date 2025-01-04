@@ -1,4 +1,4 @@
-name: 'Render Deploy'
+name: 'Render to Deploy via CI'
 description:
   'Deploy your applications to Render.com with automated status tracking and
   GitHub integration'
