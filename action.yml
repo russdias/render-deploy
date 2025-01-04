@@ -17,6 +17,9 @@ inputs:
     description:
       'The ID of your Render service (found in service URL or settings)'
     required: true
+  GITHUB_TOKEN:
+    description: 'Your GitHub token for posting comments'
+    required: true
 
 outputs:
   status:
