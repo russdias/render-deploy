@@ -33519,13 +33519,13 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.finalStatesStatusMessages = exports.finalStates = exports.GH_TOKEN = exports.RENDER_API_KEY = exports.RENDER_SERVICE_ID = exports.RENDER_API_URL = void 0;
+exports.finalStatesStatusMessages = exports.finalStates = exports.GITHUB_TOKEN = exports.RENDER_API_KEY = exports.RENDER_SERVICE_ID = exports.RENDER_API_URL = void 0;
 const core = __importStar(__nccwpck_require__(7484));
 const types_1 = __nccwpck_require__(8522);
 exports.RENDER_API_URL = 'https://api.render.com/v1';
 exports.RENDER_SERVICE_ID = core.getInput('RENDER_SERVICE_ID');
 exports.RENDER_API_KEY = core.getInput('RENDER_API_KEY');
-exports.GH_TOKEN = core.getInput('GH_TOKEN');
+exports.GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
 exports.finalStates = [
     types_1.DeployStatus.Live,
     types_1.DeployStatus.Canceled,
@@ -33762,7 +33762,6 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.postDeployUpdate = void 0;
-const core = __importStar(__nccwpck_require__(7484));
 const github = __importStar(__nccwpck_require__(3228));
 const consts_1 = __nccwpck_require__(8135);
 const octoClient_1 = __nccwpck_require__(9756);
@@ -33772,12 +33771,9 @@ const deploy_1 = __nccwpck_require__(4774);
  * 💬 Posts a deployment update comment to GitHub
  */
 const postDeployUpdate = async (deploy) => {
-    if (!consts_1.GH_TOKEN) {
-        core.info('No GH_TOKEN provided, skipping comments');
-        return;
-    }
-    const octokit = (0, octoClient_1.octoClient)(consts_1.GH_TOKEN);
+    const octokit = (0, octoClient_1.octoClient)(consts_1.GITHUB_TOKEN);
     const context = github.context;
+    const { owner, repo } = context.repo;
     let message = `## 🚀 Render Deployment Update
 📊 Status: \`${deploy.status}\`
 ⏰ Triggered at: ${new Date(deploy.createdAt).toLocaleString()}`;
@@ -33786,8 +33782,8 @@ const postDeployUpdate = async (deploy) => {
         message += `\n🔗 Service URL: ${url}`;
     }
     await octokit.rest.repos.createCommitComment({
-        owner: context.repo.owner,
-        repo: context.repo.repo,
+        owner,
+        repo,
         commit_sha: context.sha,
         body: message
     });

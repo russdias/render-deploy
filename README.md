@@ -42,7 +42,6 @@ steps:
 | ------------------- | ----------------------------------------- | -------- |
 | `RENDER_API_KEY`    | 🔑 Your Render API key                    | Yes      |
 | `RENDER_SERVICE_ID` | 🆔 The ID of the Render service to deploy | Yes      |
-| `GH_TOKEN`          | 🔒 GitHub token for posting comments      | No       |
 
 ## Outputs
 
@@ -69,6 +68,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -80,7 +82,6 @@ jobs:
         with:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Development
@@ -94,7 +95,7 @@ jobs:
 1. Bundle the action:
 
    ```bash
-   npm run bundle
+   npm run all
    ```
 
 ## License

@@ -55,7 +55,7 @@ jobs:
         id: test-action
         uses: ./
         with:
-          GH_TOKEN: '${{ secrets.GH_TOKEN }}'
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
           RENDER_API_KEY: '${{ secrets.RENDER_API_KEY }}'
           RENDER_SERVICE_ID: '${{ secrets.RENDER_SERVICE_ID }}'
 
