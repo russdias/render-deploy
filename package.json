@@ -1,7 +1,7 @@
 {
   "name": "render-deploy",
   "description": "GitHub Action to deploy applications to Render.com",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "Russ Dias",
   "homepage": "https://github.com/russdias/render-deploy",
   "repository": {
