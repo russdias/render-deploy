@@ -46,11 +46,19 @@ steps:
 
 ## Outputs
 
-| Output   | Description                                                            |
-| -------- | ---------------------------------------------------------------------- |
-| `status` | 📊 The deployment status. Possible values: created, build_in_progress, |
-|          | update_in_progress, live, deactivated, build_failed, update_failed,    |
-|          | canceled, pre_deploy_in_progress, pre_deploy_failed                    |
+| Output   | Description                                |
+| -------- | ------------------------------------------ |
+| `status` | 📊 The deployment status. Possible values: |
+|          | - created                                  |
+|          | - build_in_progress                        |
+|          | - update_in_progress                       |
+|          | - live                                     |
+|          | - deactivated                              |
+|          | - build_failed                             |
+|          | - update_failed                            |
+|          | - canceled                                 |
+|          | - pre_deploy_in_progress                   |
+|          | - pre_deploy_failed                        |
 
 ## Example Workflow
 
