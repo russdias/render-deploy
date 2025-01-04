@@ -33,7 +33,7 @@ steps:
     with:
       RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
       RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Inputs
@@ -42,6 +42,7 @@ steps:
 | ------------------- | ----------------------------------------- | -------- |
 | `RENDER_API_KEY`    | 🔑 Your Render API key                    | Yes      |
 | `RENDER_SERVICE_ID` | 🆔 The ID of the Render service to deploy | Yes      |
+| `GITHUB_TOKEN`      | 🔑 Your GitHub token for posting comments | Yes      |
 
 ## Outputs
 
