@@ -20,7 +20,7 @@ your GitHub workflows.
 
 1. A Render API key (get it from your
    [Render Dashboard](https://dashboard.render.com/settings/api-keys))
-2. Your Render service ID (found in the service URL or settings)
+1. Your Render service ID (found in the service URL or settings)
 
 ## Usage
 
@@ -46,9 +46,11 @@ steps:
 
 ## Outputs
 
-| Output   | Description                                                                                                                                                                                    |
-| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `status` | 📊 The deployment status. Possible values: created, build_in_progress, update_in_progress, live, deactivated, build_failed, update_failed, canceled, pre_deploy_in_progress, pre_deploy_failed |
+| Output   | Description                                                            |
+| -------- | ---------------------------------------------------------------------- |
+| `status` | 📊 The deployment status. Possible values: created, build_in_progress, |
+|          | update_in_progress, live, deactivated, build_failed, update_failed,    |
+|          | canceled, pre_deploy_in_progress, pre_deploy_failed                    |
 
 ## Example Workflow
 
@@ -81,7 +83,7 @@ jobs:
    npm install
    ```
 
-2. Bundle the action:
+1. Bundle the action:
 
    ```bash
    npm run bundle
