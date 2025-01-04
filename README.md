@@ -1,7 +1,8 @@
 # 🚀 Render Deploy
 
-[![GitHub Super-Linter](https://github.com/actions/typescript-action/actions/workflows/linter.yml/badge.svg)](https://github.com/super-linter/super-linter)
-![CI](https://github.com/actions/typescript-action/actions/workflows/ci.yml/badge.svg)
+[![GitHub Super-Linter](https://github.com/russdias/render-deploy/actions/workflows/linter.yml/badge.svg)](https://github.com/super-linter/super-linter)
+![CI](https://github.com/russdias/render-deploy/actions/workflows/ci.yml/badge.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A GitHub Action to automate deployments to Render.com services. This action
 allows you to trigger deployments and manage your Render services directly from
@@ -13,6 +14,13 @@ your GitHub workflows.
 - 🔄 Automated deployment status tracking
 - 💬 GitHub deployment comments integration
 - 🔒 Secure API key handling
+- ⚡️ Fast Node.js runtime with minimal dependencies
+
+## Prerequisites
+
+1. A Render API key (get it from your
+   [Render Dashboard](https://dashboard.render.com/settings/api-keys))
+2. Your Render service ID (found in the service URL or settings)
 
 ## Usage
 

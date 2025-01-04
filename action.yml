@@ -1,6 +1,8 @@
-name: '🚀 Render Deploy'
-description: '☁️ Deploy your app to Render'
-author: '👨‍💻 Russ Dias'
+name: 'Render Deploy'
+description:
+  'Deploy your applications to Render.com with automated status tracking and
+  GitHub integration'
+author: 'Russ Dias'
 
 branding:
   icon: 'cloud'
@@ -8,20 +10,26 @@ branding:
 
 inputs:
   RENDER_API_KEY:
-    description: '🔑 Your Render API key'
+    description:
+      'Your Render API key from dashboard.render.com/settings/api-keys'
     required: true
   RENDER_SERVICE_ID:
-    description: '🆔 The ID of the Render service to deploy'
+    description:
+      'The ID of your Render service (found in service URL or settings)'
     required: true
   GH_TOKEN:
-    description: '🔒 GitHub token for posting comments'
+    description:
+      'GitHub token for enhanced functionality like deployment comments and
+      status updates'
+    required: false
+    default: ${{ github.token }}
 
 outputs:
   status:
-    description: >-
-      📊 The status of the deploy. Possible values: created, build_in_progress,
+    description:
+      'The deployment status. Values: created, build_in_progress,
       update_in_progress, live, deactivated, build_failed, update_failed,
-      canceled, pre_deploy_in_progress, pre_deploy_failed
+      canceled, pre_deploy_in_progress, pre_deploy_failed'
 
 runs:
   using: node20
