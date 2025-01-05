@@ -33519,13 +33519,14 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.finalStatesStatusMessages = exports.finalStates = exports.GITHUB_TOKEN = exports.RENDER_API_KEY = exports.RENDER_SERVICE_ID = exports.RENDER_API_URL = void 0;
+exports.LOG_MESSAGES = exports.finalStatesStatusMessages = exports.finalStates = exports.WAIT_FOR_DEPLOYMENT = exports.GITHUB_TOKEN = exports.RENDER_API_KEY = exports.RENDER_SERVICE_ID = exports.RENDER_API_URL = void 0;
 const core = __importStar(__nccwpck_require__(7484));
 const types_1 = __nccwpck_require__(8522);
 exports.RENDER_API_URL = 'https://api.render.com/v1';
 exports.RENDER_SERVICE_ID = core.getInput('RENDER_SERVICE_ID');
 exports.RENDER_API_KEY = core.getInput('RENDER_API_KEY');
 exports.GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
+exports.WAIT_FOR_DEPLOYMENT = Boolean(core.getInput('WAIT_FOR_DEPLOYMENT'));
 exports.finalStates = [
     types_1.DeployStatus.Live,
     types_1.DeployStatus.Canceled,
@@ -33539,6 +33540,18 @@ exports.finalStatesStatusMessages = {
     [types_1.DeployStatus.UpdateFailed]: '❌ Update failed',
     [types_1.DeployStatus.Canceled]: '🚫 Deployment canceled',
     [types_1.DeployStatus.PreDeployFailed]: '❌ Pre-deploy checks failed'
+};
+exports.LOG_MESSAGES = {
+    SkipDeploymentWait: '🚫 Skipping deployment wait...',
+    DeploymentCompleted: '✨ Deployment workflow completed successfully!',
+    WorkflowStarted: '🚀 Starting Render deployment...',
+    DeploymentFailed: '❌ Deployment failed with status: ',
+    DeploymentTriggered: '🎯 Triggering new deployment...',
+    DeploymentTriggeredSuccess: '✅ Deployment triggered successfully with ID: ',
+    DeploymentStatusChanged: '📡 Status changed: ',
+    DeploymentInProgress: '🔄 Deploying... Current status: ',
+    DeploymentTimedOut: '⏱️ Deployment timed out after ',
+    DeploymentSuccess: '✅ Deployment successfully completed with status: '
 };
 
 
@@ -33585,6 +33598,7 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = run;
 const core = __importStar(__nccwpck_require__(7484));
+const consts_1 = __nccwpck_require__(8135);
 const deploy_1 = __nccwpck_require__(4774);
 const github_1 = __nccwpck_require__(7865);
 const types_1 = __nccwpck_require__(8522);
@@ -33595,16 +33609,21 @@ const util_1 = __nccwpck_require__(4527);
  */
 async function run() {
     try {
-        core.info('🚀 Starting Render deployment...');
+        core.info(consts_1.LOG_MESSAGES.WorkflowStarted);
         const deploy = await (0, deploy_1.triggerDeploy)();
         await (0, github_1.postDeployUpdate)(deploy);
+        if (!consts_1.WAIT_FOR_DEPLOYMENT) {
+            core.info(consts_1.LOG_MESSAGES.SkipDeploymentWait);
+            core.info(consts_1.LOG_MESSAGES.DeploymentCompleted);
+            return core.setOutput('status', deploy.status);
+        }
         const finalDeploy = await (0, deploy_1.waitForDeploy)(deploy);
         await (0, github_1.postDeployUpdate)(finalDeploy);
         if (finalDeploy.status !== types_1.DeployStatus.Live) {
-            throw new Error(`❌ Deployment failed with status: \`${finalDeploy.status}\``);
+            throw new Error(`${consts_1.LOG_MESSAGES.DeploymentFailed} \`${finalDeploy.status}\``);
         }
+        core.info(consts_1.LOG_MESSAGES.DeploymentCompleted);
         core.setOutput('status', (0, util_1.getStatusMessage)(finalDeploy.status));
-        core.info('✨ Deployment workflow completed successfully!');
     }
     catch (error) {
         // ⚠️ Fail the workflow run if an error occurs
@@ -33665,11 +33684,11 @@ const util_1 = __nccwpck_require__(4527);
  * 🎯 Triggers a new deployment on Render
  */
 const triggerDeploy = async () => {
-    core.info('🎯 Triggering new deployment...');
+    core.info(consts_1.LOG_MESSAGES.DeploymentTriggered);
     return axiosClient_1.axiosClient
         .post(`/services/${consts_1.RENDER_SERVICE_ID}/deploys`)
         .then(d => {
-        core.info(`✅ Deployment triggered successfully with ID: ${d.data.id}`);
+        core.info(`${consts_1.LOG_MESSAGES.DeploymentTriggeredSuccess} ${d.data.id}`);
         return d.data;
     });
 };
@@ -33684,14 +33703,14 @@ const waitForDeploy = async (deploy) => {
     const maxAttempts = 180; // ⏱️ 3 minutes with 1s intervals
     while (!(0, util_1.isFinalStatus)(status) && attempts < maxAttempts) {
         if (attempts % 10 === 0) {
-            core.info(`🔄 Deploying... Current status: ${status} (${attempts} checks)`);
+            core.info(`${consts_1.LOG_MESSAGES.DeploymentInProgress} ${status} (${attempts} checks)`);
         }
         await new Promise(resolve => setTimeout(resolve, 1000));
         currentDeploy = await axiosClient_1.axiosClient
             .get(`/services/${consts_1.RENDER_SERVICE_ID}/deploys/${deploy.id}`)
             .then(d => d.data);
         if (status !== currentDeploy.status) {
-            core.info(`📡 Status changed: ${status} → ${currentDeploy.status}`);
+            core.info(`${consts_1.LOG_MESSAGES.DeploymentStatusChanged} ${status} → ${currentDeploy.status}`);
             status = currentDeploy.status;
         }
         else {
@@ -33700,10 +33719,10 @@ const waitForDeploy = async (deploy) => {
         attempts++;
     }
     if (attempts >= maxAttempts) {
-        throw new Error(`⏱️ Deployment timed out after ${maxAttempts} attempts. Current status: \`${status}\``);
+        throw new Error(`${consts_1.LOG_MESSAGES.DeploymentTimedOut} ${maxAttempts} attempts. Current status: \`${status}\``);
     }
     if (currentDeploy.status === types_1.DeployStatus.Live) {
-        core.info(`✅ Deployment successfully completed with status: ${currentDeploy.status}`);
+        core.info(`${consts_1.LOG_MESSAGES.DeploymentSuccess} ${currentDeploy.status}`);
     }
     return currentDeploy;
 };
