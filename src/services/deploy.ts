@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
 import { axiosClient } from '../clients/axiosClient'
-import { RENDER_SERVICE_ID } from '../consts'
+import { LOG_MESSAGES, RENDER_SERVICE_ID } from '../consts'
 import { DeployStatus, type Deploy, type Service } from '../types'
 import { isFinalStatus } from '../util'
 
@@ -8,11 +8,11 @@ import { isFinalStatus } from '../util'
  * 🎯 Triggers a new deployment on Render
  */
 export const triggerDeploy = async (): Promise<Deploy> => {
-  core.info('🎯 Triggering new deployment...')
+  core.info(LOG_MESSAGES.DeploymentTriggered)
   return axiosClient
     .post<Deploy>(`/services/${RENDER_SERVICE_ID}/deploys`)
     .then(d => {
-      core.info(`✅ Deployment triggered successfully with ID: ${d.data.id}`)
+      core.info(`${LOG_MESSAGES.DeploymentTriggeredSuccess} ${d.data.id}`)
       return d.data
     })
 }
@@ -29,7 +29,7 @@ export const waitForDeploy = async (deploy: Deploy): Promise<Deploy> => {
   while (!isFinalStatus(status) && attempts < maxAttempts) {
     if (attempts % 10 === 0) {
       core.info(
-        `🔄 Deploying... Current status: ${status} (${attempts} checks)`
+        `${LOG_MESSAGES.DeploymentInProgress} ${status} (${attempts} checks)`
       )
     }
     await new Promise(resolve => setTimeout(resolve, 1000))
@@ -38,7 +38,9 @@ export const waitForDeploy = async (deploy: Deploy): Promise<Deploy> => {
       .then(d => d.data)
 
     if (status !== currentDeploy.status) {
-      core.info(`📡 Status changed: ${status} → ${currentDeploy.status}`)
+      core.info(
+        `${LOG_MESSAGES.DeploymentStatusChanged} ${status} → ${currentDeploy.status}`
+      )
       status = currentDeploy.status
     } else {
       status = currentDeploy.status
@@ -48,14 +50,12 @@ export const waitForDeploy = async (deploy: Deploy): Promise<Deploy> => {
 
   if (attempts >= maxAttempts) {
     throw new Error(
-      `⏱️ Deployment timed out after ${maxAttempts} attempts. Current status: \`${status}\``
+      `${LOG_MESSAGES.DeploymentTimedOut} ${maxAttempts} attempts. Current status: \`${status}\``
     )
   }
 
   if (currentDeploy.status === DeployStatus.Live) {
-    core.info(
-      `✅ Deployment successfully completed with status: ${currentDeploy.status}`
-    )
+    core.info(`${LOG_MESSAGES.DeploymentSuccess} ${currentDeploy.status}`)
   }
 
   return currentDeploy
