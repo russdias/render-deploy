@@ -57,6 +57,7 @@ on:
 
 permissions:
   contents: write
+  pull_requests: read
 
 jobs:
   deploy:
