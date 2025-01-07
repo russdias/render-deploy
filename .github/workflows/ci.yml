@@ -54,8 +54,9 @@ jobs:
       - name: Test Local Action
         id: test-action
         uses: ./
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
           RENDER_API_KEY: '${{ secrets.RENDER_API_KEY }}'
           RENDER_SERVICE_ID: '${{ secrets.RENDER_SERVICE_ID }}'
 
