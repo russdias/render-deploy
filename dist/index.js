@@ -33519,14 +33519,14 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.LOG_MESSAGES = exports.finalStatesStatusMessages = exports.finalStates = exports.WAIT_FOR_DEPLOYMENT = exports.GITHUB_TOKEN = exports.RENDER_API_KEY = exports.RENDER_SERVICE_ID = exports.RENDER_API_URL = void 0;
+exports.LOG_MESSAGES = exports.finalStatesStatusMessages = exports.finalStates = exports.GITHUB_TOKEN = exports.WAIT_FOR_DEPLOYMENT = exports.RENDER_API_KEY = exports.RENDER_SERVICE_ID = exports.RENDER_API_URL = void 0;
 const core = __importStar(__nccwpck_require__(7484));
 const types_1 = __nccwpck_require__(8522);
 exports.RENDER_API_URL = 'https://api.render.com/v1';
 exports.RENDER_SERVICE_ID = core.getInput('RENDER_SERVICE_ID');
 exports.RENDER_API_KEY = core.getInput('RENDER_API_KEY');
-exports.GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
 exports.WAIT_FOR_DEPLOYMENT = Boolean(core.getInput('WAIT_FOR_DEPLOYMENT'));
+exports.GITHUB_TOKEN = process.env.GITHUB_TOKEN ?? '';
 exports.finalStates = [
     types_1.DeployStatus.Live,
     types_1.DeployStatus.Canceled,

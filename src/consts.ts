@@ -5,8 +5,8 @@ export const RENDER_API_URL = 'https://api.render.com/v1'
 
 export const RENDER_SERVICE_ID = core.getInput('RENDER_SERVICE_ID')
 export const RENDER_API_KEY = core.getInput('RENDER_API_KEY')
-export const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN')
 export const WAIT_FOR_DEPLOYMENT = Boolean(core.getInput('WAIT_FOR_DEPLOYMENT'))
+export const GITHUB_TOKEN = process.env.GITHUB_TOKEN ?? ''
 
 export const finalStates = [
   DeployStatus.Live,
