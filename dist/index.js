@@ -33781,6 +33781,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.postDeployUpdate = void 0;
+const core = __importStar(__nccwpck_require__(7484));
 const github = __importStar(__nccwpck_require__(3228));
 const consts_1 = __nccwpck_require__(8135);
 const octoClient_1 = __nccwpck_require__(9756);
@@ -33804,6 +33805,22 @@ const postDeployUpdate = async (deploy) => {
         owner,
         repo,
         commit_sha: context.sha,
+        body: message
+    });
+    const { data: pullRequests } = await octokit.rest.repos.listPullRequestsAssociatedWithCommit({
+        owner,
+        repo,
+        commit_sha: context.sha
+    });
+    if (pullRequests.length === 0) {
+        core.info('No pull requests associated with this commit.');
+        return;
+    }
+    const prNumber = pullRequests[0].number;
+    await octokit.rest.issues.createComment({
+        owner,
+        repo,
+        issue_number: prNumber,
         body: message
     });
 };
