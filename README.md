@@ -28,7 +28,6 @@ your GitHub workflows.
 | --------------------- | ----------------------------------------- | -------- |
 | `RENDER_API_KEY`      | 🔑 Your Render API key                    | Yes      |
 | `RENDER_SERVICE_ID`   | 🆔 The ID of the Render service to deploy | Yes      |
-| `GITHUB_TOKEN`        | 🔑 Your GitHub token for posting comments | Yes      |
 | `WAIT_FOR_DEPLOYMENT` | 🔄 Wait for deployment to complete (bool) | No       |
 
 ## Outputs
@@ -67,10 +66,11 @@ jobs:
 
       - name: Deploy to Render
         uses: russdias/render-deploy@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Development
