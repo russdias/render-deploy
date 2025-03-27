@@ -4,7 +4,7 @@
 ![CI](https://github.com/russdias/render-deploy/actions/workflows/ci.yml/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A GitHub Action to automate deployments to Render.com services. This action
+A GitHub Action to automate deployments for Render.com services. This action
 allows you to trigger deployments and manage your Render services directly from
 your GitHub workflows.
 
